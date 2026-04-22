@@ -1,4 +1,8 @@
 import e from "express";
+import { computeSessionMetrics } from "../services/metrics.js";
+import { detectDrift } from "../services/detection/drift.js";
+import { detectLoop } from "../services/detection/loop.js";
+import { detectFailure } from "../services/detection/failure.js"
 
 const router = e.Router();
 
@@ -55,7 +59,35 @@ router.post("/", (req, res) => {
 
 // Debug endpoint to view sessions
 router.get("/sessions", (req, res) => {
-  res.json(sessions);
+    const result = {};
+
+    for (const sessionId in sessions) {
+        const session = sessions[sessionId]
+        
+        const metrics = computeSessionMetrics(session)
+        const failure = detectFailure(session)
+        const loop = detectLoop(session)
+        const drift = detectDrift(session)
+
+        let status = "healthy"
+
+        if (failure.isFailing) status = "failing"
+        else if (loop.isLooping) status = "looping"
+        else if (drift.isDrifting) status = "drifting"
+
+        result[sessionId] = {
+            events: session.events,
+            metrics,
+            detection: {
+              failure,
+              loop,
+              drift
+            },
+            status
+        }
+    }
+    res.json(result)
+//   res.json(sessions);
 });
 
 export default router
