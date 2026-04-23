@@ -25,7 +25,7 @@ The system consists of four main components:
 - **Frontend Dashboard (Next.js)**  
   Displays session-level insights, status, and metrics in near real-time.
 
-  ## Event Processing Flow
+## Event Processing Flow
 
 Agent Simulator → API → Normalization → Session Store → Metrics → Detection → Frontend
 
@@ -77,16 +77,16 @@ This avoids relying on fixed thresholds alone and captures both burst failures a
 ## Design Decisions
 
 ### In-Memory Storage
-Chosen for simplicity and speed within the time constraint.  
-Trade-off: data is not persistent across restarts.
+* Chosen for simplicity and speed within the time constraint.  
+* Trade-off: data is not persistent across restarts.
 
 ### Heuristic-Based Detection
-Used instead of machine learning models due to limited time.  
-Trade-off: may not capture all edge cases but remains interpretable and efficient.
+* Used instead of machine learning models due to limited time.  
+* Trade-off: may not capture all edge cases but remains interpretable and efficient.
 
 ### Real-Time Processing
-Events are processed immediately upon ingestion.  
-Trade-off: increased coupling between ingestion and detection logic.
+* Events are processed immediately upon ingestion.  
+* Trade-off: increased coupling between ingestion and detection logic.
 
 ### Sliding Window for Loop Detection
 Chosen to detect patterns rather than exact duplicates, improving robustness.
@@ -94,16 +94,16 @@ Chosen to detect patterns rather than exact duplicates, improving robustness.
 ## Setup
 
 ### Backend
-cd server  
-npm install  
-node index.js  
+`cd server`
+`npm install`  
+`npm run dev`
 
 ### Simulator
-node simulator/agent.js loop  
-node simulator/agent.js drift  
-node simulator/agent.js failure  
+`node simulator/agent.js loop  `
+`node simulator/agent.js drift`  
+`node simulator/agent.js failure`
 
 ### Frontend
-cd client  
-npm install  
-npm run dev  
+`cd client` 
+`npm install`
+`npm run dev` 
