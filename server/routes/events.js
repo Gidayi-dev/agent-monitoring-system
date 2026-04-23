@@ -59,6 +59,7 @@ router.post("/", (req, res) => {
 
 // Debug endpoint to view sessions
 router.get("/sessions", (req, res) => {
+  console.log("Incoming request body:", req.body);
     const result = {};
 
     for (const sessionId in sessions) {
